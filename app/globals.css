@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Colors */
+  --color-relay-bg: #0A0A0A;
+  --color-relay-raised: #0F0F0F;
+  --color-relay-surface: #111111;
+  --color-relay-surface-high: #161616;
+  --color-relay-border: #1A1A1A;
+  --color-relay-border-mid: #252525;
+  --color-relay-text-primary: #F0F0F0;
+  --color-relay-text-sub: #B0B0B0;
+  --color-relay-text-muted: #777777;
+  --color-relay-text-dim: #484848;
+  --color-relay-text-ghost: #2E2E2E;
+  --color-relay-accent: #F5A623;
+  --color-relay-live: #34D399;
+  --color-relay-status-open: #94A3B8;
+  --color-relay-status-claimed: #F59E0B;
+  --color-relay-status-picked: #60A5FA;
+  --color-relay-status-delivered: #34D399;
+  --color-relay-status-completed: #4ADE80;
+
+  /* Fonts */
+  --font-barlow: "Barlow Condensed", sans-serif;
+  --font-plex: "IBM Plex Mono", monospace;
+  --font-dm: "DM Sans", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #0A0A0A;
+  color: #F0F0F0;
+  font-family: "DM Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.18s ease-out both;
+}
+
+.animate-modal-in {
+  animation: modal-in 0.2s ease-out both;
 }
