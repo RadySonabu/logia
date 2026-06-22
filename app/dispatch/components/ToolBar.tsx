@@ -24,6 +24,7 @@ interface Props {
   clients: Client[];
   drivers: Driver[];
   onNewDelivery: () => void;
+  onExport:      () => void;
 }
 
 export function ToolBar({
@@ -38,6 +39,7 @@ export function ToolBar({
   clients,
   drivers,
   onNewDelivery,
+  onExport,
 }: Props) {
   return (
     <div
@@ -177,6 +179,40 @@ export function ToolBar({
 
       {/* Spacer */}
       <div style={{ marginLeft: "auto" }} />
+
+      {/* Export */}
+      <button
+        onClick={onExport}
+        style={{
+          background: "transparent",
+          color: "#555",
+          fontFamily: "var(--font-barlow)",
+          fontWeight: 700,
+          fontSize: "12px",
+          letterSpacing: "0.08em",
+          padding: "0 12px",
+          height: "28px",
+          borderRadius: "2px",
+          border: "1px solid #282828",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = "#484848";
+          e.currentTarget.style.color = "#B0B0B0";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = "#282828";
+          e.currentTarget.style.color = "#555";
+        }}
+      >
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M6 1v7M3 5l3 3 3-3M1 9v1a1 1 0 001 1h8a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        EXPORT
+      </button>
 
       {/* New delivery */}
       <button

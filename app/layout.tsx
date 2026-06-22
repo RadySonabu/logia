@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed, IBM_Plex_Mono, DM_Sans } from "next/font/google";
+import { AuthProvider } from "@/lib/auth";
 import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
@@ -28,17 +29,15 @@ export const metadata: Metadata = {
   description: "Two-sided logistics dispatch platform",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       className={`${barlowCondensed.variable} ${ibmPlexMono.variable} ${dmSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

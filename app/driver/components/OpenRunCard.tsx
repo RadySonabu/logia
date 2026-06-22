@@ -5,8 +5,8 @@ import type { Delivery, Client } from "@/lib/types";
 
 interface Props {
   delivery: Delivery;
-  client: Client | undefined;
-  onClaim: (deliveryId: string) => void;
+  client:   Client | undefined;
+  onClaim:  (deliveryId: string) => void;
 }
 
 export function OpenRunCard({ delivery, client, onClaim }: Props) {
@@ -17,67 +17,66 @@ export function OpenRunCard({ delivery, client, onClaim }: Props) {
     onClaim(delivery.id);
   }
 
+  const scheduleDisplay = delivery.proposedPulloutSchedule
+    ? delivery.proposedPulloutSchedule.replace("T", " ").slice(0, 16)
+    : "—";
+
   return (
-    <div
-      style={{
-        borderTop: "1px solid #161616",
-        padding: "18px 20px",
-      }}
-    >
-      {/* Order ID */}
-      <div
-        style={{
-          fontFamily: "var(--font-plex)",
-          fontSize: "10px",
-          color: "#2E2E2E",
-          marginBottom: "6px",
-          letterSpacing: "0.06em",
-        }}
-      >
-        {delivery.id}
+    <div style={{ borderTop: "1px solid #161616", padding: "18px 20px" }}>
+      {/* SR Number + client */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+        <span style={{ fontFamily: "var(--font-plex)", fontSize: "10px", color: "#2E2E2E", letterSpacing: "0.06em" }}>
+          {delivery.id}
+        </span>
+        <span style={{ fontFamily: "var(--font-plex)", fontSize: "10px", color: "#3A3A3A" }}>
+          {client?.name ?? ""}
+        </span>
+      </div>
+
+      {/* Customer name */}
+      <div style={{ fontFamily: "var(--font-dm)", fontSize: "19px", fontWeight: 600, color: "#F0F0F0", marginBottom: "4px", lineHeight: 1.25 }}>
+        {delivery.customerName}
       </div>
 
       {/* Address */}
+      <div style={{ fontFamily: "var(--font-dm)", fontSize: "13px", color: "#777", marginBottom: "2px" }}>
+        {delivery.contactAddressLine1}
+      </div>
+      {delivery.contactAddressLine2 && (
+        <div style={{ fontFamily: "var(--font-dm)", fontSize: "12px", color: "#484848", marginBottom: "2px" }}>
+          {delivery.contactAddressLine2}
+        </div>
+      )}
+
+      {/* Problem summary */}
       <div
         style={{
           fontFamily: "var(--font-dm)",
-          fontSize: "19px",
-          fontWeight: 600,
-          color: "#F0F0F0",
-          marginBottom: "6px",
-          lineHeight: 1.25,
+          fontSize: "12px",
+          color: "#555",
+          marginBottom: "10px",
+          overflow: "hidden",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
         }}
       >
-        {delivery.address}
+        {delivery.srProblemSummary}
       </div>
 
-      {/* Time + client */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "14px",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-plex)",
-            fontSize: "13px",
-            color: "#F5A623",
-          }}
-        >
-          {delivery.timeWindowStart}–{delivery.timeWindowEnd}
+      {/* Schedule + Qty */}
+      <div style={{ display: "flex", gap: "16px", marginBottom: "14px" }}>
+        <span style={{ fontFamily: "var(--font-plex)", fontSize: "12px", color: "#F5A623" }}>
+          {scheduleDisplay}
         </span>
-        <span
-          style={{
-            fontFamily: "var(--font-plex)",
-            fontSize: "12px",
-            color: "#3A3A3A",
-          }}
-        >
-          {client?.name ?? ""}
+        <span style={{ fontFamily: "var(--font-plex)", fontSize: "12px", color: "#3A3A3A" }}>
+          Qty: {delivery.declaredQuantity}
         </span>
+        {delivery.vehicleType && (
+          <span style={{ fontFamily: "var(--font-plex)", fontSize: "12px", color: "#3A3A3A" }}>
+            {delivery.vehicleType}
+          </span>
+        )}
       </div>
 
       {/* Claim button */}

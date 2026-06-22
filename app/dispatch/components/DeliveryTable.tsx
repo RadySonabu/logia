@@ -4,25 +4,29 @@ import type { Delivery, Client, Driver } from "@/lib/types";
 import { DeliveryRow } from "./DeliveryRow";
 
 const COLUMNS = [
-  { label: "ORDER ID",  width: "108px" },
-  { label: "CLIENT",    width: "150px" },
-  { label: "STATUS",    width: "130px" },
-  { label: "ADDRESS",   width: "1fr"   },
-  { label: "WINDOW",    width: "116px" },
-  { label: "DRIVER",    width: "120px" },
-  { label: "ACTION",    width: "72px"  },
+  { label: "SR NUMBER",  width: "100px" },
+  { label: "DATE",       width: "96px"  },
+  { label: "CUSTOMER",   width: "170px" },
+  { label: "ADDRESS",    width: "1fr"   },
+  { label: "QTY",        width: "80px"  },
+  { label: "STATUS",     width: "110px" },
+  { label: "SCHEDULE",   width: "130px" },
+  { label: "DRIVER",     width: "110px" },
+  { label: "ACTION",     width: "70px"  },
 ];
 
 interface Props {
-  deliveries: Delivery[];
-  clients: Client[];
-  drivers: Driver[];
-  onAssign: (deliveryId: string) => void;
+  deliveries:   Delivery[];
+  clients:      Client[];
+  drivers:      Driver[];
+  onAssign:     (deliveryId: string) => void;
+  onRowClick:   (deliveryId: string) => void;
 }
 
-export function DeliveryTable({ deliveries, clients, drivers, onAssign }: Props) {
+export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowClick }: Props) {
   const clientMap = Object.fromEntries(clients.map((c) => [c.id, c]));
   const driverMap = Object.fromEntries(drivers.map((d) => [d.id, d]));
+  const grid      = COLUMNS.map((c) => c.width).join(" ");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -30,7 +34,7 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign }: Props)
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: COLUMNS.map((c) => c.width).join(" "),
+          gridTemplateColumns: grid,
           padding: "0 20px",
           height: "36px",
           alignItems: "center",
@@ -47,7 +51,6 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign }: Props)
             style={{
               fontFamily: "var(--font-plex)",
               fontSize: "10px",
-              fontWeight: 400,
               color: "#2E2E2E",
               letterSpacing: "0.06em",
               textTransform: "uppercase",
@@ -73,16 +76,18 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign }: Props)
               letterSpacing: "0.06em",
             }}
           >
-            NO DELIVERIES
+            NO SERVICE REQUESTS
           </div>
         ) : (
-          deliveries.map((delivery) => (
+          deliveries.map((d) => (
             <DeliveryRow
-              key={delivery.id}
-              delivery={delivery}
-              client={clientMap[delivery.clientId]}
-              driver={delivery.driverId ? driverMap[delivery.driverId] : undefined}
+              key={d.id}
+              delivery={d}
+              client={clientMap[d.clientId]}
+              driver={d.driverId ? driverMap[d.driverId] : undefined}
               onAssign={onAssign}
+              onRowClick={onRowClick}
+              grid={grid}
             />
           ))
         )}
