@@ -46,6 +46,8 @@ function DispatchDashboard() {
   const [view,         setView]         = useState<"list" | "map">("list");
   const [clientFilter, setClientFilter] = useState("");
   const [driverFilter, setDriverFilter] = useState("");
+  const [dateFrom,     setDateFrom]     = useState("");
+  const [dateTo,       setDateTo]       = useState("");
   const [assignId,     setAssignId]     = useState<string | null>(null);
   const [detailId,     setDetailId]     = useState<string | null>(null);
   const [showCreate,   setShowCreate]   = useState(false);
@@ -58,9 +60,11 @@ function DispatchDashboard() {
       if (activeStatus !== "all" && d.status !== activeStatus) return false;
       if (clientFilter && d.clientId !== clientFilter)         return false;
       if (driverFilter && d.driverId !== driverFilter)         return false;
+      if (dateFrom && d.date < dateFrom)                       return false;
+      if (dateTo   && d.date > dateTo)                         return false;
       return true;
     });
-  }, [deliveries, activeStatus, clientFilter, driverFilter]);
+  }, [deliveries, activeStatus, clientFilter, driverFilter, dateFrom, dateTo]);
 
   const assignDelivery = assignId  ? deliveries.find((d) => d.id === assignId)  : null;
   const detailDelivery = detailId  ? deliveries.find((d) => d.id === detailId)  : null;
@@ -80,9 +84,13 @@ function DispatchDashboard() {
         onClientChange={setClientFilter}
         driverFilter={driverFilter}
         onDriverChange={setDriverFilter}
+        dateFrom={dateFrom}
+        onDateFromChange={setDateFrom}
+        dateTo={dateTo}
+        onDateToChange={setDateTo}
         clients={clients}
         drivers={drivers}
-        onExport={() => exportToExcel(deliveries, clients, drivers)}
+        onExport={() => exportToExcel(filtered, clients, drivers)}
         onNewDelivery={() => { setPreviewId(nextOrderId()); setShowCreate(true); }}
       />
 
