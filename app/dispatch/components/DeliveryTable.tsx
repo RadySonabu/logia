@@ -4,29 +4,24 @@ import type { Delivery, Client, Driver } from "@/lib/types";
 import { DeliveryRow } from "./DeliveryRow";
 
 const COLUMNS = [
-  { label: "SR NUMBER",  width: "100px" },
-  { label: "DATE",       width: "96px"  },
-  { label: "CUSTOMER",   width: "170px" },
-  { label: "ADDRESS",    width: "1fr"   },
-  { label: "QTY",        width: "80px"  },
-  { label: "STATUS",     width: "110px" },
-  { label: "SCHEDULE",   width: "130px" },
-  { label: "DRIVER",     width: "110px" },
-  { label: "ACTION",     width: "70px"  },
+  { label: "SR NUMBER", width: "110px" },
+  { label: "CUSTOMER",  width: "220px" },
+  { label: "ADDRESS",   width: "1fr"   },
+  { label: "SCHEDULE",  width: "160px" },
 ];
 
+const grid = COLUMNS.map((c) => c.width).join(" ");
+
 interface Props {
-  deliveries:   Delivery[];
-  clients:      Client[];
-  drivers:      Driver[];
-  onAssign:     (deliveryId: string) => void;
-  onRowClick:   (deliveryId: string) => void;
+  deliveries:  Delivery[];
+  clients:     Client[];
+  drivers:     Driver[];
+  onRowClick:  (deliveryId: string) => void;
+  emptyLabel?: string;
 }
 
-export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowClick }: Props) {
+export function DeliveryTable({ deliveries, clients, onRowClick, emptyLabel }: Props) {
   const clientMap = Object.fromEntries(clients.map((c) => [c.id, c]));
-  const driverMap = Object.fromEntries(drivers.map((d) => [d.id, d]));
-  const grid      = COLUMNS.map((c) => c.width).join(" ");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -36,13 +31,14 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowCli
           display: "grid",
           gridTemplateColumns: grid,
           padding: "0 20px",
-          height: "36px",
+          height: "34px",
           alignItems: "center",
           borderBottom: "1px solid #1A1A1A",
           position: "sticky",
           top: 0,
           background: "#0A0A0A",
           zIndex: 1,
+          flexShrink: 0,
         }}
       >
         {COLUMNS.map((col) => (
@@ -50,9 +46,9 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowCli
             key={col.label}
             style={{
               fontFamily: "var(--font-plex)",
-              fontSize: "10px",
+              fontSize: "9px",
               color: "#2E2E2E",
-              letterSpacing: "0.06em",
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
             }}
           >
@@ -69,14 +65,14 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowCli
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              height: "200px",
+              height: "120px",
               color: "#2E2E2E",
               fontFamily: "var(--font-plex)",
-              fontSize: "12px",
+              fontSize: "11px",
               letterSpacing: "0.06em",
             }}
           >
-            NO SERVICE REQUESTS
+            {emptyLabel ?? "NO SERVICE REQUESTS"}
           </div>
         ) : (
           deliveries.map((d) => (
@@ -84,8 +80,6 @@ export function DeliveryTable({ deliveries, clients, drivers, onAssign, onRowCli
               key={d.id}
               delivery={d}
               client={clientMap[d.clientId]}
-              driver={d.driverId ? driverMap[d.driverId] : undefined}
-              onAssign={onAssign}
               onRowClick={onRowClick}
               grid={grid}
             />

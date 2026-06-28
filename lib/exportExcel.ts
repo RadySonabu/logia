@@ -30,7 +30,7 @@ export async function exportToExcel(
   const driverMap = Object.fromEntries(drivers.map((d) => [d.id, d.name]));
 
   const rows: ExportRow[] = deliveries.map((d) => ({
-    "SR Number":                d.id,
+    "SR Number":                d.srNumber,
     "Date":                     d.date,
     "Status":                   d.status.replace(/_/g, " ").toUpperCase(),
     "Client":                   clientMap[d.clientId] ?? "",

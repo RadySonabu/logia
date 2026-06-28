@@ -18,7 +18,8 @@ export interface Driver {
 }
 
 export interface Delivery {
-  id: string;                        // SR Number e.g. "SR-0081"
+  id: string;                        // UUID primary key — never shown to users
+  srNumber: string;                  // Display label e.g. "SR-0081"
   date: string;                      // "YYYY-MM-DD"
   clientId: string;
   srProblemSummary: string;
@@ -33,6 +34,8 @@ export interface Delivery {
   actualQuantity: number | null;
   status: DeliveryStatus;
   dispatchNotes: string | null;
+  issueReported: boolean;
+  issueNote: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,5 +49,5 @@ export interface AuthUser {
   name: string;
   email: string;
   role: UserRole;
-  driverId: string | null; // only set for driver role
+  driverId: string | null;
 }

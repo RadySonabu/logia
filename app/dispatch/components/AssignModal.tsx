@@ -36,7 +36,7 @@ export function AssignModal({ delivery, client, drivers, onConfirm, onClose }: P
         {/* SR info strip */}
         <div style={{ padding: "12px 20px", background: "#0D0D0D", borderBottom: "1px solid #1E1E1E" }}>
           <div style={{ fontFamily: "var(--font-plex)", fontSize: "10px", color: "#F5A623", marginBottom: "4px" }}>
-            {delivery.id} · {client?.name ?? "—"}
+            {delivery.srNumber} · {client?.name ?? "—"}
           </div>
           <div style={{ fontFamily: "var(--font-dm)", fontSize: "13px", fontWeight: 600, color: "#B0B0B0", marginBottom: "2px" }}>
             {delivery.customerName}

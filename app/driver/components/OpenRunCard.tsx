@@ -26,7 +26,7 @@ export function OpenRunCard({ delivery, client, onClaim }: Props) {
       {/* SR Number + client */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
         <span style={{ fontFamily: "var(--font-plex)", fontSize: "10px", color: "#2E2E2E", letterSpacing: "0.06em" }}>
-          {delivery.id}
+          {delivery.srNumber}
         </span>
         <span style={{ fontFamily: "var(--font-plex)", fontSize: "10px", color: "#3A3A3A" }}>
           {client?.name ?? ""}

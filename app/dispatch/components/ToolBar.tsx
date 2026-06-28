@@ -1,22 +1,9 @@
 "use client";
 
-import type { DeliveryStatus } from "@/lib/types";
 import type { Client, Driver } from "@/lib/types";
-import { STATUS_CONFIG } from "./StatusChip";
 import { DateRangePicker } from "./DateRangePicker";
 
-const ALL_STATUSES: DeliveryStatus[] = [
-  "open",
-  "claimed",
-  "picked_up",
-  "delivered",
-  "completed",
-];
-
-
 interface Props {
-  activeStatus:   DeliveryStatus | "all";
-  onStatusChange: (s: DeliveryStatus | "all") => void;
   view:           "list" | "map";
   onViewChange:   (v: "list" | "map") => void;
   clientFilter:   string;
@@ -27,6 +14,8 @@ interface Props {
   onDateFromChange: (v: string) => void;
   dateTo:         string;
   onDateToChange: (v: string) => void;
+  layoutMode:     "tabs" | "stacked";
+  onLayoutToggle: () => void;
   clients:        Client[];
   drivers:        Driver[];
   onExport:       () => void;
@@ -34,22 +23,13 @@ interface Props {
 }
 
 export function ToolBar({
-  activeStatus,
-  onStatusChange,
-  view,
-  onViewChange,
-  clientFilter,
-  onClientChange,
-  driverFilter,
-  onDriverChange,
-  dateFrom,
-  onDateFromChange,
-  dateTo,
-  onDateToChange,
-  clients,
-  drivers,
-  onExport,
-  onNewDelivery,
+  view, onViewChange,
+  clientFilter, onClientChange,
+  driverFilter, onDriverChange,
+  dateFrom, onDateFromChange, dateTo, onDateToChange,
+  layoutMode, onLayoutToggle,
+  clients, drivers,
+  onExport, onNewDelivery,
 }: Props) {
   return (
     <div
@@ -64,41 +44,6 @@ export function ToolBar({
         flexShrink: 0,
       }}
     >
-      {/* Status filter chips */}
-      <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-        {ALL_STATUSES.map((s) => {
-          const cfg = STATUS_CONFIG[s];
-          const isActive = activeStatus === s;
-          return (
-            <button
-              key={s}
-              onClick={() => onStatusChange(isActive ? "all" : s)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "3px 9px",
-                borderRadius: "2px",
-                border: `1px solid ${isActive ? cfg.color : "#1E1E1E"}`,
-                background: isActive ? cfg.bg : "transparent",
-                color: isActive ? cfg.color : "#555",
-                fontFamily: "var(--font-barlow)",
-                fontWeight: 700,
-                fontSize: "10px",
-                letterSpacing: "0.06em",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                transition: "border-color 0.15s, color 0.15s, background 0.15s",
-              }}
-            >
-              {cfg.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Divider */}
-      <div style={{ width: "1px", height: "20px", background: "#1E1E1E", margin: "0 4px" }} />
-
       {/* List / Map toggle */}
       <div style={{ display: "flex", alignItems: "center", height: "28px", border: "1px solid #1E1E1E", borderRadius: "2px", overflow: "hidden" }}>
         {(["list", "map"] as const).map((v) => (
@@ -145,6 +90,42 @@ export function ToolBar({
       {/* Spacer */}
       <div style={{ marginLeft: "auto" }} />
 
+      {/* Layout toggle */}
+      <button
+        onClick={onLayoutToggle}
+        title={layoutMode === "tabs" ? "Switch to stacked view" : "Switch to tab view"}
+        style={{
+          background: "transparent",
+          border: "1px solid #282828",
+          color: "#555",
+          height: "28px",
+          width: "32px",
+          borderRadius: "2px",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "border-color 0.15s, color 0.15s",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#484848"; e.currentTarget.style.color = "#B0B0B0"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#282828"; e.currentTarget.style.color = "#555"; }}
+      >
+        {layoutMode === "tabs" ? (
+          /* stacked icon */
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.4">
+            <rect x="1" y="1"  width="11" height="3" rx="0.5" />
+            <rect x="1" y="5"  width="11" height="3" rx="0.5" />
+            <rect x="1" y="9"  width="11" height="3" rx="0.5" />
+          </svg>
+        ) : (
+          /* tabs icon */
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.4">
+            <rect x="1" y="4"  width="11" height="8" rx="0.5" />
+            <path d="M1 4 V2.5 Q1 1 2.5 1 H5 Q6.5 1 6.5 2.5 V4" />
+          </svg>
+        )}
+      </button>
+
       {/* Export */}
       <button
         onClick={onExport}
@@ -159,7 +140,7 @@ export function ToolBar({
         onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#282828"; e.currentTarget.style.color = "#555"; }}
       >
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M6 1v7M3 5l3 3 3-3M1 9v1a1 1 0 001 1h8a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M6 1v7M3 5l3 3 3-3M1 9v1a1 1 0 001 1h8a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         EXPORT
       </button>
@@ -174,7 +155,7 @@ export function ToolBar({
           borderRadius: "2px", border: "none", cursor: "pointer",
         }}
       >
-        + NEW DELIVERY
+        + NEW SR
       </button>
     </div>
   );
